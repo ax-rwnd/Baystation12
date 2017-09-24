@@ -16,13 +16,11 @@
 /obj/item/integrated_circuit/arithmetic/addition/do_work()
 	var/inputs_used = 0
 	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs) {
+	for(var/datum/integrated_io/input/I in inputs) 
 		I.pull_data()
-		if(isnum(I.data)) {
+		if(isnum(I.data)) 
 			result = result + I.data
 			inputs_used += 1
-		}
-	}
 
 	// Too few inputs, err
 	if (inputs_used < 2)
@@ -40,17 +38,14 @@
 	var/inputs_used = 0
 	var/result = 0
 
-	for(var/datum/integrated_io/input/I in inputs) {
+	for(var/datum/integrated_io/input/I in inputs)
 		I.pull_data()
-		if(isnum(I.data)) {
-			if (inputs_used == 0) {
+		if(isnum(I.data))
+			if (inputs_used == 0)
 				result = I.data
-			} else {
+			else
 				result = result - I.data
-			}
 			inputs_used += 1
-		}
-	}
 
 	// Too few inputs, err
 	if (inputs_used < 2)
@@ -67,13 +62,11 @@
 /obj/item/integrated_circuit/arithmetic/multiplication/do_work()
 	var/inputs_used = 0
 	var/result = 1
-	for(var/datum/integrated_io/input/I in inputs) {
+	for(var/datum/integrated_io/input/I in inputs)
 		I.pull_data()
-		if(isnum(I.data)) {
+		if(isnum(I.data))
 			result = result * I.data
 			inputs_used += 1
-		}
-	}
 
 	// Too few inputs
 	if (inputs_used < 2)
@@ -90,16 +83,14 @@
 /obj/item/integrated_circuit/arithmetic/division/do_work()
 	var/inputs_used = 0
 	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs) {
+	for(var/datum/integrated_io/input/I in inputs)
 		I.pull_data()
-		if(isnum(I.data) && I.data != 0) { //No runtimes here.
+		if(isnum(I.data) && I.data != 0) //No runtimes here.
 			if (inputs_used == 0)
 				result = I.data
 			else result = result / I.data
 
 			inputs_used += 1
-		}
-	}
 
 	// Too few inputs
 	if (inputs_used < 2)
@@ -116,12 +107,11 @@
 
 /obj/item/integrated_circuit/arithmetic/absolute/do_work()
 	var/result = null //err if it's not a number
-	for(var/datum/integrated_io/input/I in inputs) {
+	for(var/datum/integrated_io/input/I in inputs)
 		I.pull_data()
-		if(isnum(I.data)) {
+		if(isnum(I.data))
 			result = abs(I.data)
-		}
-	}
+
 	set_pin_data(IC_OUTPUT, 1, result)
 
 // Averaging //
