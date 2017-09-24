@@ -14,7 +14,7 @@
 /obj/item/integrated_circuit/converter/num2text/do_work()
 	var/result = null
 	var/datum/integrated_io/incoming = inputs[1]
-	if(incoming.data && isnum(incoming.data))
+	if(incoming.data != null && isnum(incoming.data))
 		result = num2text(incoming.data)
 	set_pin_data(IC_OUTPUT, 1, result)
 
