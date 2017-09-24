@@ -14,12 +14,20 @@
 	icon_state = "addition"
 
 /obj/item/integrated_circuit/arithmetic/addition/do_work()
+	var/inputs_used = 0
 	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs)
+	for(var/datum/integrated_io/input/I in inputs) {
 		I.pull_data()
-		if(isnum(I.data))
+		if(isnum(I.data)) {
 			result = result + I.data
-	set_pin_data(IC_OUTPUT, 1, result)
+			inputs_used += 1
+		}
+	}
+
+	// Too few inputs, err
+	if (inputs_used < 2)
+		set_pin_data(IC_OUTPUT, 1, null)
+	else set_pin_data(IC_OUTPUT, 1, result)
 
 // -Subtracting- //
 
@@ -29,12 +37,25 @@
 	icon_state = "subtraction"
 
 /obj/item/integrated_circuit/arithmetic/subtraction/do_work()
+	var/inputs_used = 0
 	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs)
+
+	for(var/datum/integrated_io/input/I in inputs) {
 		I.pull_data()
-		if(isnum(I.data))
-			result = result - I.data
-	set_pin_data(IC_OUTPUT, 1, result)
+		if(isnum(I.data)) {
+			if (inputs_used == 0) {
+				result = I.data
+			} else {
+				result = result - I.data
+			}
+			inputs_used += 1
+		}
+	}
+
+	// Too few inputs, err
+	if (inputs_used < 2)
+		set_pin_data(IC_OUTPUT, 1, null)
+	else set_pin_data(IC_OUTPUT, 1, result)
 
 // *Multiply* //
 
@@ -43,13 +64,21 @@
 	desc = "This circuit can multiply numbers."
 	icon_state = "multiplication"
 
-/obj/item/integrated_circuit/arithmetic/subtraction/do_work()
-	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs)
+/obj/item/integrated_circuit/arithmetic/multiplication/do_work()
+	var/inputs_used = 0
+	var/result = 1
+	for(var/datum/integrated_io/input/I in inputs) {
 		I.pull_data()
-		if(isnum(I.data))
+		if(isnum(I.data)) {
 			result = result * I.data
-	set_pin_data(IC_OUTPUT, 1, result)
+			inputs_used += 1
+		}
+	}
+
+	// Too few inputs
+	if (inputs_used < 2)
+		set_pin_data(IC_OUTPUT, 1, null)
+	else set_pin_data(IC_OUTPUT, 1, result)
 
 // /Division/  //
 
@@ -59,12 +88,23 @@
 	icon_state = "division"
 
 /obj/item/integrated_circuit/arithmetic/division/do_work()
+	var/inputs_used = 0
 	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs)
+	for(var/datum/integrated_io/input/I in inputs) {
 		I.pull_data()
-		if(isnum(I.data) && I.data != 0) //No runtimes here.
-			result = result / I.data
-	set_pin_data(IC_OUTPUT, 1, result)
+		if(isnum(I.data) && I.data != 0) { //No runtimes here.
+			if (inputs_used == 0)
+				result = I.data
+			else result = result / I.data
+
+			inputs_used += 1
+		}
+	}
+
+	// Too few inputs
+	if (inputs_used < 2)
+		set_pin_data(IC_OUTPUT, 1, null)
+	else set_pin_data(IC_OUTPUT, 1, result)
 
 // Absolute //
 
@@ -75,11 +115,13 @@
 	inputs = list("A")
 
 /obj/item/integrated_circuit/arithmetic/absolute/do_work()
-	var/result = 0
-	for(var/datum/integrated_io/input/I in inputs)
+	var/result = null //err if it's not a number
+	for(var/datum/integrated_io/input/I in inputs) {
 		I.pull_data()
-		if(isnum(I.data) && I.data != 0)
-			result = abs(result)
+		if(isnum(I.data)) {
+			result = abs(I.data)
+		}
+	}
 	set_pin_data(IC_OUTPUT, 1, result)
 
 // Averaging //
