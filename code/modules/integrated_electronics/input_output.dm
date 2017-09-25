@@ -496,7 +496,7 @@
 /obj/item/integrated_circuit/output/screen/any_examine(mob/user)
 	to_chat(user, "There is a little screen labeled '[name]', which displays [stuff_to_display ? "'[stuff_to_display]'" : "nothing"].")
 /obj/item/integrated_circuit/output/screen/get_topic_data()
-	return stuff_to_display ? list(stuff_to_display) : list()
+	return stuff_to_display != null ? list(stuff_to_display) : list()
 
 /obj/item/integrated_circuit/output/screen/do_work()
 	var/datum/integrated_io/I = inputs[1]
